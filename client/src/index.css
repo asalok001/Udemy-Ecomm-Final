@@ -1,0 +1,27 @@
+.slider img,
+.card-image{
+    height: 450px;
+    object-fit: cover;
+}
+
+.img{
+    height: 250px;
+    object-fit: cover;
+}
+
+.button {
+    padding: 10px;
+    font-size: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px rgb(184, 181, 181);
+     width:50%;
+}
+
+.search{
+   justify-content: end;
+   
+}
+
+.pointer{
+    cursor: pointer;
+}
