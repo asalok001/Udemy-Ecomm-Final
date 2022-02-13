@@ -10,7 +10,7 @@ import { auth, googleAuthProvider } from '../../firebase';
 
 const Login = () => {
     const [email, setEmail] = useState('punam.sonu03@gmail.com');
-    const [password, setPassword] = useState('123456');
+    const [password, setPassword] = useState('456456');
     const [loading, setLoading] = useState(false);
 
     const history = useHistory();
@@ -79,11 +79,11 @@ const Login = () => {
                         console.log('payload from login');
                     }).catch((err) => {
                         setLoading(false);
-                        toast.error(err);
+                        toast.error('Login Failed', err);
                     });
             } catch (error) {
                 setLoading(false);
-                toast.error(error);
+                toast.error('Login Failed ', error);
             }
         };
 

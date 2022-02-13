@@ -6,10 +6,13 @@ import { toast } from 'react-toastify';
 import { getUserOrders } from "../../functions/user";
 import UserNav from "../../components/nav/UserNav";
 import ShowPaymentInfo from '../../components/cards/ShowPaymentInfo';
-import { Document, Page, Text, View, StyleSheet, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+// import { Document, Page, Text, View, StyleSheet, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import jsPDF from 'jspdf';
+import Invoice from '../../components/order/Invoice';
 
 const History = () => {
     const [orders, setOrders] = useState([]);
+    const [download, setDownload] = useState(false);
 
     const { user } = useSelector(state => ({ ...state }));
 
@@ -17,12 +20,12 @@ const History = () => {
     useEffect(() => {
         loadOrders();
     }, []);
-    console.log("Payments at Orders history", orders);
+    // console.log("Payments at Orders history", orders.products);
 
     const loadOrders = () => {
         getUserOrders(user.token).then(res => {
             setOrders(res.data);
-            console.log('Orders and payment by user', JSON.stringify(res.data[0], null, 4));
+            // console.log('Orders and payment by user', JSON.stringify(res.data[0], null, 4));
         })
             .catch(err => {
                 console.log('Error at User Hisory', err);
@@ -70,23 +73,56 @@ const History = () => {
     //     </PDFViewer>
     // );
 
-    const showDownloadLink = () => (
-        // <PDFDownloadLink document={
-        <Document>
-            <Page size='A4'>
-                <View>
-                    <Text>Section# 1</Text>
-                    <Text>Section# 2</Text>
-                </View>
-            </Page>
-        </Document>
-        // }
-        //     fileName='Invoice.pdf'
-        //     className='btn btn-block btn-outline-primary btn-sm'
-        // >
-        //     Download PDF
-        // </PDFDownloadLink>
-    );
+    // const downloadFile = () => {
+    //     let doc = new jsPDF('landscape', 'px', 'a4', 'false');
+    //     // doc.save('invoice2.pdf');
+    // };
+
+    // const showDownloadLink = () => {
+    //     setDownload(true);
+    //     // Invoice.downloadPdf()
+    //     // console.log('Download = ', download);
+    //     return (
+    //         <Invoice />
+
+    // );
+
+    // let doc = new jsPDF('landscape', 'px', 'a4', 'false');
+    // doc.AcroForm.TextField.apply(<Invoice />);
+    // doc.addPage(<Invoice />);
+    // doc.save('invoice2.pdf');
+    // doc.addPage();
+    // doc.setFont('Helvertica', 'bold');
+    // doc.text(60, 60, 'Section 1');
+    // doc.text(60, 80, 'Section 2');
+    // doc.text(60, 100, 'Mob');
+    // doc.setFont('Helvertica', 'normal');
+    // doc.text(100, 60, 'Alok');
+    // doc.text(100, 80, 'Alok2792@hotmail.com');
+    // doc.text(100, 100, '123456');
+
+    // };
+
+    // <PDFDownloadLink document={
+    //     <Document>
+    //         <Page size='A4'>
+    //             <View>
+    //                 <Text>Section# 1</Text>
+    //                 <Text>Section# 2</Text>
+    //             </View>
+    //         </Page>
+    //     </Document>
+    // }
+    //     fileName='Invoice.pdf'
+    //     className='btn btn-block btn-outline-primary btn-sm'
+    // >
+    //     Download Old PDF
+    // </PDFDownloadLink>;
+
+
+
+
+
 
     const showOrders = () =>
         orders.flatMap((order, i) => (
@@ -95,7 +131,7 @@ const History = () => {
                 {showOrderTable(order)}
                 <div className="row">
                     <div className="col">
-                        {showDownloadLink()}
+                        <Invoice order={order} />
                     </div>
                 </div>
             </div>

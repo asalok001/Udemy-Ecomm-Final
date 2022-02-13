@@ -1,6 +1,7 @@
 import React from "react";
 
 const ShowPaymentInfo = (props) => {
+    // console.log('In ShowPayment Info', props.order.products[0].product);
 
     return (
         <div>
