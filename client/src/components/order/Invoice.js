@@ -4,62 +4,17 @@ import "jspdf-autotable";
 import "../../tableStyle.css";
 
 const Invoice = (props) => {
-    const { title, price, brand, color, quantity } =
-        props.order.products[0].product;
-    console.log("All Orders are", props.order);
-
-    // <table id="mytable" style="display: none">
-    //     <thead>
-    //         <tr>
-    //             <th>Title</th>
-    //             <th>Price</th>
-    //             <th>Brand</th>
-    //             <th>Quantity</th>
-    //             <th>Colour</th>
-    //         </tr>
-    //     </thead>
-    //     <tbody>
-    //         <tr>
-    //             <td>{title}</td>
-    //             <td>{price}</td>
-    //             <td>{brand}</td>
-    //             <td>{quantity}</td>
-    //             <td>{color}</td>
-    //         </tr>
-    //     </tbody>
-    // </table>;
-    const dates = new Date();
     let doc = new jsPDF("landscape", "px", "a4", "false");
 
-    let title = [];
-    let price = [];
-    let brand = [];
-    let quantity = [];
-    let color = [];
-    let rows = [];
-    props.order.products.forEach((element) => {
-        // console.log("Elenents valuse", element);
-        title.push(element.product.title);
-        price.push(element.product.price);
-        brand.push(element.product.brand);
-        quantity.push(element.product.quantity);
-        color.push(element.color);
-        // rows.push(
-        //     element.product.title,
-        //     element.product.price,
-        //     element.product.brand,
-        //     element.product.quantity,
-        //     element.product.color
-        // );
-    });
+    let data = props.order.products.map((element) => [
+        element.product.title,
+        element.product.price,
+        element.product.brand,
+        element.product.quantity,
+        element.color,
+    ]);
 
-    // console.log('All variables are', title, price, brand, quantity, color);
-
-    // console.log('All Rows', rows);
-
-    let head = ["Title", "Price", "Brand", "Quantity", "Colour"];
-
-    const downloadPdf = (tableData) => {
+    const downloadPdf = () => {
         doc
             .setFontSize(12)
             .setTextColor("gray")
@@ -72,43 +27,16 @@ const Invoice = (props) => {
             .setFont("helvetica", "bold")
             .text(20, 100, "Order- Summary");
 
-        // doc.html(tableData, { function() { doc.save('invoice.pdf'); } });
+        console.log("orders  are", props.order);
+        let headers = [["Title", "Price", "Brand", "Quantity", "Colour"]];
 
-        // doc.autoTable(head, rows, { startY: 110 });
-        console.log("Titles are", title);
+        let content = {
+            startY: 110,
+            head: headers,
+            body: data,
+        };
 
-        doc.autoTable({
-            // html: "#mytable",
-            // bodyStyle: { marginTop: 110 },
-            // didDrawCell: function (data) {
-            //     if (data.column.index === 5 && data.cell.section === 'body') {
-            //         var td = data.cell.raw;
-            //         var img = td.getElementsByTagName('img')[0];
-            //         var dim = data.cell.height - data.cell.padding('vertical');
-            //         var textPos = data.cell.textPos;
-            // doc.addImage(img.src, textPos.x, textPos.y, dim, dim);
-            //     }
-            // }
-            columnStyles: {
-
-                invoice: { halign: "center", fontSize: 24, textColor: "blue" },
-                // author: { valign: 'middle', fontSize: 12, textColor: "black" },
-            },
-            margin: { top: 110 },
-            head: [["Title", "Price", "Brand", "Quantity", "Colour"]],
-
-            body: [
-                //     // ['A1', 'a2', 'a3', 'a4', 'a5'],
-                //     // ['A1', 'a2', 'a3', 'a4', 'a5'],
-                //     // ['A1', 'a2', 'a3', 'a4', 'a5'],
-                //     // ['A1', 'a2', 'a3', 'a4', 'a5'],
-                //     // [{ content: rows, colSpan: 5, rowSpan: 10 }],
-                //     // [rows]
-                [[title], [price], [brand], [quantity], [color]],
-
-            ],
-        });
-
+        doc.autoTable(content);
         doc.save("invoice2.pdf");
         return doc;
     };
@@ -124,4 +52,5 @@ const Invoice = (props) => {
         </div>
     );
 };
+
 export default Invoice;
