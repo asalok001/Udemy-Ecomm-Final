@@ -125,7 +125,7 @@ const History = () => {
 
 
     const showOrders = () =>
-        orders.flatMap((order, i) => (
+        orders.reverse().map((order, i) => (
             <div className="m-5 p-5 card" key={i}>
                 <ShowPaymentInfo order={order} />
                 {showOrderTable(order)}

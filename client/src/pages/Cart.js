@@ -27,7 +27,22 @@ const Cart = () => {
     };
 
     const saveOrderToDb = () => {
-        console.log('All items in cart', cart);
+        console.log("All items in cart", cart);
+        userCart(cart, user.token)
+            .then((res) => {
+                console.log("Cart post response ", res);
+                if (res.data.ok) history.push("/checkout");
+            })
+            .catch((err) => {
+                console.log("Cart post Error", err);
+            });
+    };
+
+    const saveCashOrderToDb = () => {
+        dispatch({
+            type: "COD",
+            payload: true
+        });
         userCart(cart, user.token)
             .then((res) => {
                 console.log("Cart post response ", res);
@@ -75,24 +90,35 @@ const Cart = () => {
                     <h4>Order Summary</h4>
                     <hr />
                     <p>Products</p>
-                    {cart && cart.map((c, i) => (
-                        <div key={i}>
-                            <p>
-                                {c.title} x {c.count} = ₹{c.price * c.count}
-                            </p>
-                        </div>
-                    ))}
+                    {cart &&
+                        cart.map((c, i) => (
+                            <div key={i}>
+                                <p>
+                                    {c.title} x {c.count} = ₹{c.price * c.count}
+                                </p>
+                            </div>
+                        ))}
                     <hr />
                     Total : <b>₹{getTotal()}</b>
                     <hr />
                     {user ? (
-                        <button
-                            onClick={saveOrderToDb}
-                            disabled={!count}
-                            className="btn btn-sm btn-primary mt-2"
-                        >
-                            Proceed To CheckOut
-                        </button>
+                        <>
+                            <button
+                                onClick={saveOrderToDb}
+                                disabled={!count}
+                                className="btn btn-sm btn-primary mt-2"
+                            >
+                                Proceed To CheckOut
+                            </button>
+                            <br />
+                            <button
+                                onClick={saveCashOrderToDb}
+                                disabled={!count}
+                                className="btn btn-sm btn-warning mt-2"
+                            >
+                                Pay Cash on Delivery
+                            </button>
+                        </>
                     ) : (
                         <button className="btn btn-sm btn-outline-primary mt-2">
                             <Link

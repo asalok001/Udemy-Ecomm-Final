@@ -60,10 +60,54 @@ export const createOrder = async (stripeResponse, authtoken) => {
     );
 };
 
+export const createCashOrderForUser = async (authtoken, COD, coupon) => {
+    return await axios.post(
+        `${process.env.REACT_APP_API}/user/cash-order`,
+        { couponApplied: coupon, COD },
+        {
+            headers: {
+                authtoken,
+            },
+        }
+    );
+};
+
 export const getUserOrders = async (authtoken) => {
     return await axios.get(`${process.env.REACT_APP_API}/user/orders`, {
         headers: {
             authtoken,
         },
     });
+};
+
+export const getWishlist = async (authtoken) => {
+    return await axios.get(`${process.env.REACT_APP_API}/user/wishlist`, {
+        headers: {
+            authtoken,
+        },
+    });
+};
+
+export const removeFromWishlist = async (productId, authtoken) => {
+    return await axios.put(
+        `${process.env.REACT_APP_API}/user/wishlist/${productId}`,
+        {},
+        {
+            headers: {
+                authtoken,
+            },
+        }
+    );
+};
+
+export const addToWishlist = async (productId, authtoken) => {
+    return await axios.post(
+        `${process.env.REACT_APP_API}/user/wishlist`,
+        { productId },
+        {
+            headers: {
+                authtoken,
+            },
+        }
+    );
 };

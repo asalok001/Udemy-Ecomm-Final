@@ -14,6 +14,8 @@ const Invoice = (props) => {
         element.color,
     ]);
 
+    // console.log("orders  are", props.order.paymentIntent.paymentIntent.amount);
+
     const downloadPdf = () => {
         doc
             .setFontSize(12)
@@ -26,8 +28,32 @@ const Invoice = (props) => {
             .setTextColor("black")
             .setFont("helvetica", "bold")
             .text(20, 100, "Order- Summary");
+        doc
+            .setFontSize(12)
+            .setFont("helvetica", "normal")
+            .text(
+                25,
+                250,
+                `Date:${"                       "} ${new Date(
+                    props.order.paymentIntent.paymentIntent.created * 1000
+                ).toLocaleString()}`
+            );
+        doc.text(
+            `Order Id:                   ${props.order.paymentIntent.paymentIntent.id}`,
+            25,
+            265
+        );
+        doc.text(`Order Status:           ${props.order.orderStatus}`, 25, 280);
+        doc.text(
+            `Total Paid:               ${props.order.paymentIntent.paymentIntent.amount}`,
+            25,
+            295
+        );
+        doc
+            .setFontSize(16)
+            .setTextColor("gray")
+            .text(`~~ Thank You For Shopping With Us ~~`, 250, 395);
 
-        console.log("orders  are", props.order);
         let headers = [["Title", "Price", "Brand", "Quantity", "Colour"]];
 
         let content = {
